@@ -98,24 +98,25 @@ class RobotEnvironment:
         return path
 
     def get_next_position(self, current_pos, action):
-        x, y = current_pos
-        if action == 'move_forward':
-            new_x = x
-            new_y = y + 1
-        elif action == 'move_backward':
-            new_x = x
-            new_y = y - 1
-        elif action == 'turn_left':
-            new_x = x - 1
-            new_y = y
-        elif action == 'turn_right':
-            new_x = x + 1
-            new_y = y
-        else:
-            return None
-        
-        new_pos = (new_x, new_y)
-        return new_pos
+    x, y = current_pos
+    if action == 'move_forward':
+        new_x = x
+        new_y = y + 1
+    elif action == 'move_backward':
+        new_x = x
+        new_y = y - 1
+    elif action == 'turn_left':
+        new_x = x - 1
+        new_y = y
+    elif action == 'turn_right':
+        new_x = x + 1
+        new_y = y
+    else:
+        return None
+    
+    new_pos = (new_x, new_y)
+    return new_pos
+
 
 # Test the implementation on various environments
 def test_environment():
@@ -145,9 +146,13 @@ def analyze_heuristic_impact():
     path_manhattan = env.a_star_search(robot_initial_position, target_cell)
     total_cost_manhattan = sum(env.calculate_cost('move_forward') for _ in range(len(path_manhattan) - 1))
 
+    # Create a new environment object for obstacle-aware heuristic
+    env_obstacle_aware = RobotEnvironment(5, 5, obstacles=[(3, 0), (2, 2), (1, 3)], charging_station=(4, 4))
+    env_obstacle_aware.set_robot_position(robot_initial_position)
+
     # Calculate path length and total cost with the obstacle-aware heuristic
-    path_obstacle_aware = env.a_star_search(robot_initial_position, target_cell)
-    total_cost_obstacle_aware = sum(env.calculate_cost('move_forward') for _ in range(len(path_obstacle_aware) - 1))
+    path_obstacle_aware = env_obstacle_aware.a_star_search(robot_initial_position, target_cell)
+    total_cost_obstacle_aware = sum(env_obstacle_aware.calculate_cost('move_forward') for _ in range(len(path_obstacle_aware) - 1))
 
     print("Manhattan Heuristic:")
     print("Path length:", len(path_manhattan))
@@ -162,7 +167,4 @@ def analyze_heuristic_impact():
 if __name__ == "__main__":
     test_environment()
     analyze_heuristic_impact()
-
-
-
 
