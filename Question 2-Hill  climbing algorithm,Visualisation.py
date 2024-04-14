@@ -7,7 +7,7 @@ total_places = int(input('How many places do you want to visit?: '))
 # Set of places user wants to visit
 places = ["Khomasdal", "Zoo Park", "Namibia Craft Centre", "National Museum", "Heroes Acre", "Christuskirche"]
 
-# List of  distances between the places mentioned above
+# List of distances between the places mentioned above
 distances = [
     [0, 5.7, 5.3, 5.5, 15.4, 6.4],
     [5.8, 0, 0.8, 0.5, 11, 0.45],
@@ -18,38 +18,32 @@ distances = [
 ]
 
 
-# Function to  randomly select initial route
+# Function to randomly shuffle the list of places to generate an initial route
 def randomize_place():
-    selected_initial_route = places.copy()
-    place = (random.sample(selected_initial_route, k=total_places))
-
-    return place
+    return random.sample(places, k=total_places)
 
 
-# Function to calculate total distance of a randomly selected route
+# Function to calculate the total distance of a given route
 def total_distance(place, places_list, distance_matrix):
     distance_total = 0
-    # Loop to iterate through array list of places provided by user
+    # Loop to iterate through the array list of places provided by the user
     for i in range(len(place) - 1):
         current_location = places_list.index(place[i])
         next_location = places_list.index(place[i + 1])
-        # Retrieves distance from distance list,using distance index inorder to calculate total distance
+        # Retrieves distance from the distance list, using distance index in order to calculate total distance
         distance = distance_matrix[current_location][next_location]
         distance_total += distance
     return distance_total
 
 
-# Function to generate the neighboring routes of the randomly selected initial route
+# Function to generate the neighboring routes of the given route
 def route_neighbours(initial_route):
     neighbours = []
     for i in range(len(initial_route)):
         for j in range(i + 1, len(initial_route)):
-            # Swap positions of two places that are randomly selected
             neighbour = initial_route.copy()
             neighbour[i], neighbour[j] = neighbour[j], neighbour[i]
-            # Check if the new route contains unique places,used to eliminate duplicate places
-            if len(set(neighbour)) == len(neighbour):
-                neighbours.append(neighbour)
+            neighbours.append(neighbour)
     return neighbours
 
 
@@ -87,12 +81,8 @@ neighbouring_routes = route_neighbours(route)
 print("Initial route:", route)
 print("Initial distance:", total_length)
 
-# Print neighboring routes with their distances
-print("\nNeighboring routes:")
-for i, route in enumerate(neighbouring_routes):
-    print(f"Neighbour {i + 1}: {route}, Distance: {round(total_distance(route, places, distances), 2)}")
 
-print("\n Optimal route found from neighboring route evaluation")
+print("\nOptimal route found from neighboring route evaluation")
 
 # Print the final route and its distance
 print("Final route:", final_route)
@@ -109,7 +99,7 @@ coordinates = {
 }
 
 
-# Function to plot a given route
+# Function to plot the given route
 def plot_route(route, color='b', label=None):
     x_coords = [coordinates[place][0] for place in route]
     y_coords = [coordinates[place][1] for place in route]
@@ -119,7 +109,7 @@ def plot_route(route, color='b', label=None):
 x_positions_labels = [0, 1, 2, 3, 4, 5]
 
 # Plot of the initial and final routes on a graph
-plt.figure(figsize=(5, 5))
+plt.figure(figsize=(12, 10))
 plot_route(route, color='r', label='Initial Route')
 plot_route(final_route, color='g', label='Final Route')
 plt.title('Routes')
